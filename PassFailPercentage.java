@@ -1,10 +1,19 @@
-package com.cg.seleniumTests;
-import com.cg.seleniumTests.ReadValue;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import java.io.IOException;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+//import com.cg.seleniumTests.*;
 
 public class PassFailPercentage{
 	static String url = "http://34.221.243.81:9000/petclinic-Dev/owners/find.html";
@@ -17,10 +26,17 @@ public class PassFailPercentage{
 	private static float failPercentage;
 	
 	public static void main(String[] args) throws InterruptedException {
-		ReadValue readValue = new ReadValue();
-		Double acceptableValue = (Double) readValue.ReadValue(1, 1);
-		System.out.println(acceptableValue);
-		Double acceptable = acceptableValue;
+//		ReadValue readValue = new ReadValue();
+//		Double acceptableValue = (Double) readValue.ReadValue(1, 1);
+//		System.out.println(acceptableValue);
+//		Double acceptable = acceptableValue;
+//		 ReadValue rv = new ReadValue();
+//	        Object OutputValue =rv.ReadValue(1, 1);
+//	        System.out.println(OutputValue);
+               Double OutputValue = (Double) PassFailPercentage.ReadValue(1, 1);
+               System.out.println(OutputValue);	        
+	        Double acceptable = (Double) OutputValue;
+		
 // calling the test cases in the main method
 		testCaseOne();
 		testCaseTwo();
@@ -48,10 +64,36 @@ public class PassFailPercentage{
 		}
 		
 	}
+  static Object ReadValue(int RowValue, int ColumnValue) {
+         Object value=null;
+         Workbook wb=null;
+         try {
+                 FileInputStream fis =new FileInputStream("/home/ec2-user/AcceptableValueFile.xlsx");
+                 wb=new XSSFWorkbook(fis);
+         } catch (FileNotFoundException e) {
+                 // TODO Auto-generated catch block
+                 e.printStackTrace();
+         } catch (IOException e) {
+                 // TODO Auto-generated catch block
+                 e.printStackTrace();
+         }
+         Sheet sheet=wb.getSheetAt(0);
+         Row row=sheet.getRow(RowValue);
+         Cell cell=row.getCell(ColumnValue);
+         value=cell.getNumericCellValue();
+
+         return value;
+         // TODO Auto-generated method stub
+	 }
+
+
 	public static void testCaseOne() throws InterruptedException {
 		totalCases++;
-		System.setProperty("webdriver.chrome.driver", "/usr/bin/chromedriver");
-		WebDriver driver = new ChromeDriver();
+System.setProperty("webdriver.chrome.driver", "/usr/bin/chromedriver");
+ChromeOptions chromeOptions = new ChromeOptions();
+chromeOptions.addArguments("--headless");
+chromeOptions.addArguments("--no-sandbox");
+WebDriver driver = new ChromeDriver(chromeOptions);
 		driver.get(url );
 		Thread.sleep(1000);
 		driver.findElement(By.xpath("//a[@class='btn btn-default']")).click();
@@ -86,8 +128,11 @@ public class PassFailPercentage{
 	
 	public static void testCaseTwo() {
 		totalCases++;
-		System.setProperty("webdriver.chrome.driver", "/usr/bin/chromedriver");
-		WebDriver driver = new ChromeDriver();
+System.setProperty("webdriver.chrome.driver", "/usr/bin/chromedriver");
+ChromeOptions chromeOptions = new ChromeOptions();
+chromeOptions.addArguments("--headless");
+chromeOptions.addArguments("--no-sandbox");
+WebDriver driver = new ChromeDriver(chromeOptions);
 		driver.get(url);
 		//if (driver.getPageSource().contains("Last name")) {
 			if (driver.getPageSource().contains("Yashaswini")) {
@@ -104,8 +149,11 @@ public class PassFailPercentage{
 	
 	private static void testCaseThree() throws InterruptedException {
 		totalCases++;
-		System.setProperty("webdriver.chrome.driver", "/usr/bin/chromedriver");
-		WebDriver driver = new ChromeDriver();
+System.setProperty("webdriver.chrome.driver", "/usr/bin/chromedriver");
+ChromeOptions chromeOptions = new ChromeOptions();
+chromeOptions.addArguments("--headless");
+chromeOptions.addArguments("--no-sandbox");
+WebDriver driver = new ChromeDriver(chromeOptions);
 		driver.get(url);
 		JavascriptExecutor js = (JavascriptExecutor)driver;
 		driver.findElement(By.xpath("//span[contains(text(),'Find owners')]")).click();
